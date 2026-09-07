@@ -15,5 +15,11 @@ pipeline {
                 bat 'npm install'
             }
         }
+
+        stage('Unit and Integration Tests') {
+            steps {
+                bat 'npm test'
+            }
+        }
     }
 }
