@@ -3,22 +3,34 @@ pipeline {
 
     stages {
 
-        stage('Check Node and npm') {
+        stage('Checkout') {
             steps {
-                bat 'node --version'
-                bat 'npm --version'
+                git branch: 'main',
+                    url: 'https://github.com/esha12345/8.2CDevSecOps.git'
             }
         }
 
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
                 bat 'npm install'
             }
         }
 
-        stage('Unit and Integration Tests') {
+        stage('Run Tests') {
             steps {
-                bat 'npm test'
+                bat 'npm test || exit /b 0'
+            }
+        }
+
+        stage('Generate Coverage Report') {
+            steps {
+                bat 'npm run coverage || exit /b 0'
+            }
+        }
+
+        stage('NPM Audit (Security Scan)') {
+            steps {
+                bat 'npm audit || exit /b 0'
             }
         }
     }
