@@ -33,5 +33,13 @@ pipeline {
                 bat 'npm audit || exit /b 0'
             }
         }
+
+        stage('SonarQube Scan') {
+            steps {
+                withSonarQubeEnv('SonarQubeCloud') {
+                    bat 'sonar-scanner -Dsonar.projectKey=esha12345_8.2CDevSecOps -Dsonar.organization=esha12345 -Dsonar.sources=.'
+                }
+            }
+        }
     }
 }
