@@ -35,10 +35,12 @@ pipeline {
         }
 
         stage('SonarQube Scan') {
-    steps {
-        withSonarQubeEnv('SonarQubeCloud') {
-            withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                bat 'sonar-scanner -Dsonar.projectKey=esha12345_8.2CDevSecOps -Dsonar.organization=esha12345 -Dsonar.sources=.'
+            steps {
+                withSonarQubeEnv('SonarQubeCloud') {
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                        bat 'sonar-scanner -Dsonar.projectKey=esha12345_8.2CDevSecOps -Dsonar.organization=esha12345 -Dsonar.sources=.'
+                    }
+                }
             }
         }
     }
