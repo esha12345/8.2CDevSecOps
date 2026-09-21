@@ -12,7 +12,7 @@ pipeline {
                 bat 'npm run build'
 
                 echo 'Building Docker image...'
-                bat 'docker build -t 82cdevsecops-goof:%BUILD_NUMBER% .'
+               bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" build -t 82cdevsecops-goof:%BUILD_NUMBER% .'
             }
         }
 
