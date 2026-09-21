@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     environment {
-        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
-    }
+    PATH = "C:\\Users\\HP\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;${env.PATH}"
+ }
     stages {
 
         stage('Build') {
@@ -12,7 +12,7 @@ pipeline {
                 bat 'npm run build'
 
                 echo 'Building Docker image...'
-               bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" build -t 82cdevsecops-goof:%BUILD_NUMBER% .'
+               bat 'docker build -t 82cdevsecops-goof:%BUILD_NUMBER% .'
             }
         }
 
