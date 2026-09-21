@@ -48,17 +48,22 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                echo 'Deploying application to the test environment...'
+       stage('Deploy') {
+    steps {
+        echo 'Deploying application to the test environment...'
 
-                bat 'docker compose down'
-                bat 'docker compose up -d --build'
+        bat 'where docker'
+        bat 'docker --version'
+        bat 'where docker-compose'
+        bat 'docker-compose version'
 
-                echo 'Checking deployed containers...'
-                bat 'docker compose ps'
-            }
-        }
+        bat 'docker compose down'
+        bat 'docker compose up -d --build'
+
+        echo 'Checking deployed containers...'
+        bat 'docker compose ps'
+    }
+}
 
         stage('Release') {
             steps {
