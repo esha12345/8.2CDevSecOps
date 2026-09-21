@@ -51,17 +51,11 @@ pipeline {
        stage('Deploy') {
     steps {
         echo 'Deploying application to the test environment...'
-
-        bat 'where docker'
-        bat 'docker --version'
-        bat 'where docker-compose'
-        bat 'docker-compose version'
-
-        bat 'docker compose down'
-        bat 'docker compose up -d --build'
+        bat 'docker-compose down'
+        bat 'docker-compose up -d --build'
 
         echo 'Checking deployed containers...'
-        bat 'docker compose ps'
+        bat 'docker-compose ps'
     }
 }
 
