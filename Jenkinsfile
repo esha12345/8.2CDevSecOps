@@ -16,15 +16,15 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                echo 'Running automated tests...'
-                bat 'npm test || exit /b 0'
-
-                echo 'Generating coverage report...'
-                bat 'npm run coverage || exit /b 0'
-            }
-        }
+         stage('Test') {
+     steps {
+         echo 'Running automated tests...'
+         bat 'npm test'
+ 
+         echo 'Generating coverage report...'
+         bat 'npm run coverage'
+      }
+  }
 
         stage('Code Quality') {
             steps {
@@ -42,11 +42,15 @@ pipeline {
         }
 
         stage('Security') {
-            steps {
-                echo 'Running dependency security scan...'
-                bat 'npm audit || exit /b 0'
-            }
-        }
+    steps {
+        echo 'Running dependency security audit...'
+
+        bat 'npm audit --json > npm-audit.json || exit /b 0'
+
+        archiveArtifacts artifacts: 'npm-audit.json',
+                         allowEmptyArchive: true
+    }
+}
 
        stage('Deploy') {
     steps {
@@ -70,20 +74,16 @@ pipeline {
             }
         }
 
-        stage('Monitoring') {
-            steps {
-                echo 'Monitoring the deployed application...'
+       stage('Monitoring') {
+    steps {
+        echo 'Monitoring deployed application...'
 
-                bat 'curl -f http://localhost:3001/'
+        bat 'docker-compose ps'
+        bat 'curl -f http://localhost:3001/'
 
-                echo 'Application health check completed successfully.'
-            }
-
-            post {
-                failure {
-                    echo 'ALERT: Application health check failed.'
-                }
-            }
+        echo 'Application health check completed successfully.'
+    }
+}
         }
     }
 
