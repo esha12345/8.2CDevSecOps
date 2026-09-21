@@ -96,4 +96,3 @@ pipeline {
             echo 'Pipeline failed. Please review the failed stage console output.'
         }
     }
-}
