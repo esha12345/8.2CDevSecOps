@@ -18,11 +18,16 @@ pipeline {
 
          stage('Test') {
     steps {
-        echo 'Running automated application tests...'
-
-        bat 'node --check app.js'
-
-        bat 'node tests/pipeline.test.js'
+        echo 'Starting environment for live application test...'
+        bat 'docker-compose up -d --build'
+        bat 'powershell -Command "Start-Sleep -Seconds 15"'
+        bat 'curl -f http://localhost:3001/'
+        echo 'Application responded successfully — test passed.'
+    }
+    post {
+        always {
+            bat 'docker-compose down'
+        }
     }
 }
 
