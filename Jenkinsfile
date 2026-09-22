@@ -22,7 +22,7 @@ pipeline {
 
         bat 'node --check app.js'
 
-        echo 'Application syntax validation completed successfully.'
+        bat 'node tests/pipeline.test.js'
     }
 }
 
