@@ -1,18 +1,32 @@
 const assert = require('assert');
-const fs = require('fs');
+const http = require('http');
+const { spawn } = require('child_process');
 
-console.log('Running pipeline validation tests...');
+console.log('Starting app for automated testing...');
 
-const packageJson = JSON.parse(
-    fs.readFileSync('package.json', 'utf8')
-);
+const server = spawn('node', ['app.js'], { env: { ...process.env, PORT: 3001 } });
 
-assert(packageJson.name, 'Package name should exist');
-assert(packageJson.version, 'Package version should exist');
-assert(packageJson.scripts, 'NPM scripts should exist');
-assert(packageJson.dependencies, 'Dependencies should exist');
+let output = '';
+server.stdout.on('data', (d) => { output += d.toString(); });
+server.stderr.on('data', (d) => { output += d.toString(); });
 
-console.log('✓ Package metadata test passed');
-console.log('✓ NPM scripts test passed');
-console.log('✓ Dependencies test passed');
-console.log('All automated tests passed.');
+function checkEndpoint(retries) {
+  http.get('http://localhost:3001/', (res) => {
+    assert.strictEqual(res.statusCode, 200, `Expected 200, got ${res.statusCode}`);
+    console.log('✓ App responded with 200 on /');
+    console.log('All automated tests passed.');
+    server.kill();
+    process.exit(0);
+  }).on('error', (err) => {
+    if (retries > 0) {
+      setTimeout(() => checkEndpoint(retries - 1), 1000);
+    } else {
+      console.error('✗ App did not respond in time:', err.message);
+      console.error('App output:', output);
+      server.kill();
+      process.exit(1);
+    }
+  });
+}
+
+setTimeout(() => checkEndpoint(10), 1500);
