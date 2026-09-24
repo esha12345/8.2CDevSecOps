@@ -18,6 +18,9 @@ pipeline {
 
          stage('Test') {
     steps {
+        echo 'Running automated unit tests with code coverage...'
+        bat 'npx jest tests/utils.test.js --coverage'
+
         echo 'Starting environment for live application test...'
         bat 'docker-compose up -d --build'
         bat 'powershell -Command "Start-Sleep -Seconds 15"'
